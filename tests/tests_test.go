@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"testing"
 
-	requests "github.com/mikeyQwn/greq"
+	"github.com/mikeyQwn/greq"
 )
 
 const (
@@ -84,7 +84,7 @@ func TestJsonPost(t *testing.T) {
 		Boolean bool
 		Foo     []int
 	}
-	resp, err := requests.NewRequest[Response]().MustPost(REQ_ADDR + JSON_ENDPOINT).BaseType()
+	resp, err := greq.NewRequest[Response]().MustPost(REQ_ADDR + JSON_ENDPOINT).BaseType()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,7 +109,7 @@ func TestJsonPost(t *testing.T) {
 }
 
 func TestStringGet(t *testing.T) {
-	resp := requests.NewRequest[struct{}]().MustGet(REQ_ADDR + STRING_ENDPOINT).String()
+	resp := greq.NewRequest[struct{}]().MustGet(REQ_ADDR + STRING_ENDPOINT).String()
 	if resp != "Hello, friend" {
 		t.Fatal(resp)
 	}
@@ -123,7 +123,7 @@ type OkResponse struct {
 }
 
 func TestHeadersA(t *testing.T) {
-	resp, err := requests.NewRequest[ErrorResponse]().MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
+	resp, err := greq.NewRequest[ErrorResponse]().MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +133,7 @@ func TestHeadersA(t *testing.T) {
 }
 
 func TestHeadersB(t *testing.T) {
-	resp, err := requests.NewRequest[ErrorResponse]().WithHeader("Cookie", "Auth=abc").MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
+	resp, err := greq.NewRequest[ErrorResponse]().WithHeader("Cookie", "Auth=abc").MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -143,7 +143,7 @@ func TestHeadersB(t *testing.T) {
 }
 
 func TestHeadersC_KV(t *testing.T) {
-	resp, err := requests.NewRequest[OkResponse]().WithHeader("Cookie", "Auth=abc").WithHeader("Fingerprint", "fingerprint").MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
+	resp, err := greq.NewRequest[OkResponse]().WithHeader("Cookie", "Auth=abc").WithHeader("Fingerprint", "fingerprint").MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -153,7 +153,7 @@ func TestHeadersC_KV(t *testing.T) {
 }
 
 func TestHeadersD_map(t *testing.T) {
-	resp, err := requests.NewRequest[OkResponse]().WithHeaders(map[string]string{"Cookie": "Auth=abc", "Fingerprint": "fingerprint"}).MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
+	resp, err := greq.NewRequest[OkResponse]().WithHeaders(map[string]string{"Cookie": "Auth=abc", "Fingerprint": "fingerprint"}).MustGet(REQ_ADDR + AUTHED_ENDPOINT).BaseType()
 	if err != nil {
 		t.Fatal(err)
 	}
