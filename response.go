@@ -37,3 +37,19 @@ func (r *Response[T]) BaseType() (*T, error) {
 	}
 	return &t, nil
 }
+
+func (r *Response[T]) BodyRaw() []byte {
+	return r.body
+}
+
+func (r *Response[T]) StatusCode() int {
+	return r.core.StatusCode
+}
+
+func (r *Response[T]) Error() error {
+	return r.err
+}
+
+func (r Response[T]) Header() http.Header {
+	return r.core.Header
+}
