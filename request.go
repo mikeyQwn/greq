@@ -79,6 +79,10 @@ func (r *Request[T]) PostContext(ctx context.Context, url string) (*Response[T],
 	return r.doReqContext(ctx, url, http.MethodPost)
 }
 
+func (r *Request[T]) Err() error {
+	return r.err
+}
+
 func (r *Request[T]) doReqContext(ctx context.Context, url string, method string) (*Response[T], error) {
 	if r.err != nil {
 		return nil, r.err
