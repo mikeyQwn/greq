@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -26,7 +27,7 @@ func NewRequest[T any]() *Request[T] {
 
 func (r *Request[T]) WithJson(body any) *Request[T] {
 	encoded, err := json.Marshal(body)
-	r.err = err
+	r.err = fmt.Errorf("%w: WithJson could not marshal request's body", err)
 	r.body = bytes.NewReader(encoded)
 	return r
 }
@@ -89,14 +90,14 @@ func (r *Request[T]) doReqContext(ctx context.Context, url string, method string
 	}
 	req, err := http.NewRequestWithContext(ctx, method, url, r.body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: error creating a new request", err)
 	}
 	for k, v := range r.headers {
 		req.Header.Add(k, v)
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: error sending a request", err)
 	}
 	return NewResponse[T](resp), nil
 }

@@ -2,6 +2,7 @@ package greq
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -15,6 +16,9 @@ type Response[T any] struct {
 
 func NewResponse[T any](core *http.Response) *Response[T] {
 	body, err := io.ReadAll(core.Body)
+	if err != nil {
+		err = fmt.Errorf("%w: could not read the request's body", err)
+	}
 	return &Response[T]{
 		core: core,
 		body: body,
@@ -33,7 +37,7 @@ func (r *Response[T]) BaseType() (*T, error) {
 	}
 	err := json.Unmarshal(r.body, &t)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: could not convert response body to the base type", err)
 	}
 	return &t, nil
 }
