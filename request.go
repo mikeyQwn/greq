@@ -44,6 +44,10 @@ func (r *Request[T]) WithHeaders(headers map[string]string) *Request[T] {
 	return r
 }
 
+func (r *Request[T]) Copy() *Request[T] {
+	return NewRequest[T]().WithHeaders(r.headers)
+}
+
 func (r *Request[T]) Get(url string) (*Response[T], error) {
 	return r.GetContext(context.Background(), url)
 }
